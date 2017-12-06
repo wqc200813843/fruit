@@ -14,6 +14,7 @@ export default {
     return {}
   },
   computed: {
+    // 从store中获取有权限的路由
     ...mapGetters([
       'permission_routers'
     ])

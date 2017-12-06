@@ -33,5 +33,17 @@ export const asyncRouterMap = [
         path: 'index', component: _import('person/index'), name: '人员管理'
       }
     ]
+  },
+  {
+    path: '/task',
+    component: Layout,
+    redirect: '/task/index',
+    noDropdown: true,
+    name: '任务管理',
+    children: [
+      {
+        path: 'index', component: _import('task/index'), name: '任务管理'
+      }
+    ]
   }
 ]
