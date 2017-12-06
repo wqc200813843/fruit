@@ -58,6 +58,7 @@
 <script>
 import {parseTime} from '../../utils'
 const formDefault = { // 表单信息
+  id: null,
   name: '', // 名称
   type: '1', // 重要程度
   needTime: 0, // 需时
@@ -70,6 +71,7 @@ export default {
     return {
       dialogFormVisible: false, // 显隐dialog
       form: { // 表单信息
+        id: null,
         name: '', // 名称
         type: '1', // 重要程度
         needTime: 0, // 需时

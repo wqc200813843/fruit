@@ -45,5 +45,17 @@ export const asyncRouterMap = [
         path: 'index', component: _import('task/index'), name: '任务管理'
       }
     ]
+  },
+  {
+    path: '/orgManager',
+    component: Layout,
+    redirect: '/orgManager/index',
+    noDropdown: true,
+    name: '组织管理',
+    children: [
+      {
+        path: 'index', component: _import('orgManager/index'), name: '组织管理'
+      }
+    ]
   }
 ]

@@ -75,3 +75,20 @@ html,body {
 .el-form .el-switch {
   top: -2px;
 }
+
+/* tree-view */
+.tree-view-container{
+  height: 100%;
+  margin-left: 210px;
+  border:1px solid #dddee1;
+  padding:10px;
+  flex-flow: column;
+}
+
+.org-view-tree{
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 200px;
+  border:1px solid #dddee1;
+}

@@ -1,6 +1,7 @@
 <template>
   <div class="pager-table">
     <el-table
+    ref='table'
     :data="tableData"
     stripe
     border

@@ -2,7 +2,7 @@
   <div class="taskManager">
     <div class="operation pb10 clearfix"><!-- 操作栏 -->
       <el-button type="primary" @click="taskEdit">任务添加</el-button>
-      <task-add @add-task="addTask" ref="taskEdit"></task-add>
+      <task-edit @add-task="addTask" ref="taskEdit"></task-edit>
       <el-button type="danger" @click="mutiDel">批量删除</el-button>
     </div>
     <div class="task-list"><!-- 带分页表格 -->
@@ -73,7 +73,7 @@
 </template>
 <script>
 import PagerTable from '../../components/PagerTable'
-import taskAdd from './taskAdd'
+import taskEdit from './taskEdit'
 export default {
   data () {
     return {
@@ -101,7 +101,7 @@ export default {
   },
   components: {
     PagerTable,
-    taskAdd
+    taskEdit
   },
   methods: {
     /**
