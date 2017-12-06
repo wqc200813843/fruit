@@ -2,66 +2,68 @@
   <div class="taskManager">
     <div class="operation pb10 clearfix"><!-- 操作栏 -->
       <el-button type="primary" @click="taskEdit">任务添加</el-button>
-      <task-add ref="taskEdit"></task-add>
-      <el-button type="danger">批量删除</el-button>
+      <task-add @add-task="addTask" ref="taskEdit"></task-add>
+      <el-button type="danger" @click="mutiDel">批量删除</el-button>
     </div>
     <div class="task-list"><!-- 带分页表格 -->
         <pager-table
+        ref="pagerTable"
         :pageSize="searchCondition.pageSize"
         :currentPage="searchCondition.currentPage"
         :total="searchCondition.total"
         hasSelect
-        :tableData="personList">
+        :tableData="taskList">
           <template slot="table-column">
             <el-table-column
-              label="姓名"
-              prop="name"
+              label="名称"
+              prop="name">
+            </el-table-column>
+            <el-table-column
+              label="类型"
+              prop="type"
+              width="80">
+              <template slot-scope="scope">
+                <span v-text="typeComputed(scope)"></span>
+              </template>  
+            </el-table-column>
+            <el-table-column
+              label="需时"
+              prop="needTime"
               width="80">
             </el-table-column>
             <el-table-column
-              label="人员类型"
-              prop="personType"
-              width="80">
+              label="时限"
+              prop="time"
+              width="140">
+              <template slot-scope="scope">
+                <i class="el-icon-time"></i>
+                <span style="margin-left: 10px">{{ scope.row.time }}</span>
+              </template>
             </el-table-column>
             <el-table-column
-              label="性别"
-              prop="sex"
-              width="80">
-            </el-table-column>
-            <el-table-column
-              label="年龄"
-              prop="age"
-              width="80">
-            </el-table-column>
-            <el-table-column
-              label="证件类型"
-              prop="idCardType"
-              width="80">
-            </el-table-column>
-            <el-table-column
-              prop="idCardNumber"
-              show-overflow-tooltip
-              label="证件号码">
-            </el-table-column>
-            <el-table-column
-              prop="houseAddress"
-              show-overflow-tooltip
-              label="房屋地址">
-            </el-table-column>
-            <el-table-column
-              prop="phone"
-              show-overflow-tooltip
-              label="电话号码">
+              label="完成情况"
+              prop="complete"
+              width="100">
+              <template slot-scope="scope">
+                <el-switch
+                  v-model="scope.row.complete"
+                  active-color="#13ce66"
+                  inactive-color="#ff4949"
+                  >
+                </el-switch>
+              </template>
             </el-table-column>
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
                 <el-button
-                  size="mini">
-                  编辑</el-button>
+                @click="taskEdit(scope.row)"
+                size="mini">
+                编辑</el-button>
                 <el-button
-                  size="mini"
-                  type="danger">
-                  删除</el-button>
+                @click="delTask(scope.row)"
+                size="mini"
+                type="danger">
+                删除</el-button>
               </template>
             </el-table-column>
           </template>
@@ -83,18 +85,18 @@ export default {
         currentPage: 1,
         total: 1
       },
-      personList: [
+      taskList: [
         {
-          name: '周程',
-          personType: '业主',
-          sex: '男',
-          age: '25',
-          idCardType: '身份证',
-          idCardNumber: '339005199205954234543543543543543534543543543543543534543',
-          houseAddress: 'xx小区1幢1单元101',
-          phone: '15105857130'
+          id: '432423423423',
+          name: 'fruit manager v1.0',
+          type: '1',
+          needTime: 20,
+          time: '2017-12-30',
+          complete: false,
+          content: '1. fruit manager\n2.buyer manager'
         }
-      ]
+      ],
+      selections: []
     }
   },
   components: {
@@ -102,8 +104,98 @@ export default {
     taskAdd
   },
   methods: {
-    taskEdit: function (taskInfo) {
-      this.$refs.taskEdit.taskEdit(taskInfo)
+    /**
+     * @description 开始任务添加/编辑
+     *
+     * @param {Object} taskInfo @default {} 任务信息
+     */
+    taskEdit: function (taskInfo = {}) {
+      const taskInfoTmp = Object.assign({}, taskInfo)
+      taskInfoTmp.time && (taskInfoTmp.time = new Date(taskInfoTmp.time))
+      this.$refs.taskEdit.taskEdit(taskInfoTmp)
+    },
+    typeComputed: function (scope) {
+      let type = ''
+      switch (scope.row.type) {
+        case '1':
+          type = '紧急重要'
+          break
+        case '2':
+          type = '不紧急重要'
+          break
+        case '3':
+          type = '紧急不重要'
+          break
+        case '4':
+          type = '不紧急不重要'
+          break
+        default :
+          type = '--'
+          break
+      }
+      return type
+    },
+    addTask: function (taskInfo = {}) {
+      JSON.stringify(taskInfo) !== '{}' && this.taskList.push(taskInfo)
+    },
+    delTask: function (taskInfo) {
+      var INDEX = this.taskList.findIndex(function (value, index, arr) {
+        return value.id === taskInfo.id
+      })
+      if (INDEX >= 0) {
+        this.$confirm('确定要刪除<span style="color:#f00">' + taskInfo.name + '</span>吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true
+        }).then(() => {
+          this.taskList.splice(INDEX, 1)
+          this.$message({
+            message: '刪除成功',
+            type: 'warning'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      }
+    },
+    mutiDel: function () {
+      var selections = this.$refs.pagerTable.getSelectData()
+      if (selections.length) {
+        let str = ''
+        let ids = []
+        for (let [index, elem] of selections.entries()) {
+          str += elem.name
+          ids.push(elem.id)
+          if (index !== selections.length - 1) {
+            str += ','
+          }
+        }
+        this.$confirm('确定要刪除<span style="color:#f00">' + str + '</span>吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+          dangerouslyUseHTMLString: true
+        }).then(() => {
+          this.$message({
+            message: '刪除成功',
+            type: 'warning'
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+      } else {
+        this.$message({
+          message: '请至少选择一项！',
+          type: 'warning'
+        })
+      }
     }
   }
 }

@@ -70,3 +70,8 @@ html,body {
 .operation>.el-button:not(:first-child) {
   margin-left: 10px;
 }
+
+/* 对elementui的switch位置做调整 */
+.el-form .el-switch {
+  top: -2px;
+}
