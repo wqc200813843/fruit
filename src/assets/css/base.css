@@ -92,3 +92,8 @@ html,body {
   width: 200px;
   border:1px solid #dddee1;
 }
+
+/* table组件在dialog弹出框显示时会显示滚动条 */
+.el-table .el-table__body-wrapper {
+  overflow-x: hidden;
+}

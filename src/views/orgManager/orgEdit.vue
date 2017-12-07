@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogFormVisible" width="400px">
+  <el-dialog :visible.sync="dialogFormVisible" width="400px" @open="clearValidate">
     <div slot="title">
       <span class="pull-left pl10">{{form.id?'组织编辑':'组织添加'}}</span>
     </div>
@@ -63,7 +63,6 @@ export default {
       this.form.name = taskInfo.name || ''
       this.form.parentName = taskInfo.parentName || ''
       this.form.memo = taskInfo.memo || ''
-      this.$refs['form'] && this.$refs['form'].clearValidate()
       this.dialogFormVisible = true
     },
     /**
@@ -76,7 +75,6 @@ export default {
             message: '保存任务成功',
             type: 'success'
           })
-          this.$refs['form'].resetFields()
           this.dialogFormVisible = false
         } else {
           this.$message({
@@ -91,8 +89,18 @@ export default {
      * @description 关闭任务添加弹出框
      */
     cancel: function () {
-      this.$refs['form'].resetFields()
       this.dialogFormVisible = false
+    },
+    /**
+     * @description 打开模态框清除表单验证
+     * 表单值初始化时会促使表单验证启动，故在模态框打开时清除表单验证
+     */
+    clearValidate: function () {
+      // 需要模态框打开时clearValidate才会生效
+      this.$nextTick(() => {
+        this.$refs['form'].clearValidate()
+      })
+      // this.$refs['form'] && this.$refs['form'].clearValidate()
     }
   }
 }

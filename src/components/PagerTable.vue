@@ -1,13 +1,13 @@
 <template>
   <div class="pager-table">
     <el-table
-    ref='table'
+    ref="table"
     :data="tableData"
     stripe
     border
     header-cell-class-name="text-align-center"
     @selection-change="handleSelectionChange"
-    style="width: 100%">
+    style="width: 100%;">
       <el-table-column v-if="hasSelect"
         type="selection"
         width="55">
@@ -83,6 +83,9 @@ export default {
      */
     currentChange: function (val) {
       this.$emit('search', {currentPage: val})
+    },
+    doLayOut: function () {
+      this.$refs['table'].doLayout()
     }
   }
 }

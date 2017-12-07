@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync="dialogFormVisible" width="400px">
+  <el-dialog :visible.sync="dialogFormVisible" width="400px" @open="clearValidate">
     <div slot="title">
       <span class="pull-left pl10">{{form.id?'任务编辑':'任务添加'}}</span>
     </div>
@@ -57,15 +57,6 @@
 </template>
 <script>
 import {parseTime} from '../../utils'
-const formDefault = { // 表单信息
-  id: null,
-  name: '', // 名称
-  type: '1', // 重要程度
-  needTime: 0, // 需时
-  time: null, // 时限
-  complete: false, // 完成情况
-  content: '' // 任务内容
-}
 export default {
   data () {
     return {
@@ -121,8 +112,13 @@ export default {
      * @param {Object} taskInfo @default {} 任务信息
      */
     taskEdit: function (taskInfo = {}) {
-      Object.assign(this.form, formDefault, taskInfo)
-      this.$refs['form'] && this.$refs['form'].clearValidate()
+      this.form.id = taskInfo.id || null
+      this.form.name = taskInfo.name || '' // 名称
+      this.form.type = taskInfo.type || '1' // 重要程度
+      this.form.needTime = taskInfo.needTime || 0 // 需时
+      this.form.time = taskInfo.time || null // 时限
+      this.form.complete = false // 完成情况
+      this.form.content = taskInfo.content || '' // 任务内容
       this.dialogFormVisible = true
     },
     /**
@@ -130,15 +126,11 @@ export default {
      */
     save: function () {
       this.$refs['form'].validate((valid) => {
-        const taskInfo = Object.assign({}, this.form)
         if (valid) {
           this.$message({
             message: '保存任务成功',
             type: 'success'
           })
-          taskInfo.time = parseTime(taskInfo.time, '{y}-{m}-{d}')
-          taskInfo.id = new Date().getTime()
-          this.$emit('add-task', taskInfo)
           this.dialogFormVisible = false
         } else {
           this.$message({
@@ -155,6 +147,17 @@ export default {
     cancel: function () {
       this.$refs['form'].resetFields()
       this.dialogFormVisible = false
+    },
+    /**
+     * @description 打开模态框清除表单验证
+     * 表单值初始化时会促使表单验证启动，故在模态框打开时清除表单验证
+     */
+    clearValidate: function () {
+      // 需要模态框打开时clearValidate才会生效
+      this.$nextTick(() => {
+        this.$refs['form'].clearValidate()
+      })
+      // this.$refs['form'] && this.$refs['form'].clearValidate()
     }
   }
 }

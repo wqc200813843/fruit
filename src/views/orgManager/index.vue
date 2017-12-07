@@ -4,6 +4,7 @@
     <div class="tree-view-container flex">
       <div class="operation pb10 clearfix"><!-- 操作栏 -->
         <el-button type="primary" @click="orgEdit">添加</el-button>
+        <org-edit ref="orgEdit"></org-edit>
         <el-button>导入</el-button>
         <el-button>导出</el-button>
         <el-button type="danger" @click="orgDel({})">批量删除</el-button>
@@ -57,7 +58,6 @@
         </pager-table>
       </div>
     </div>
-    <org-edit ref="orgEdit"></org-edit>
   </div>
 </template>
 <script>
@@ -83,11 +83,6 @@ export default {
         }
       ]
     }
-  },
-  mounted: function () {
-    // this.$nextTick(() => {
-    //   this.$refs['pagerTable'].$refs['table'].doLayout()
-    // })
   },
   components: {
     OrgTreeView,

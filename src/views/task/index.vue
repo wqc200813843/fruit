@@ -2,8 +2,8 @@
   <div class="taskManager">
     <div class="operation pb10 clearfix"><!-- 操作栏 -->
       <el-button type="primary" @click="taskEdit">任务添加</el-button>
-      <task-edit @add-task="addTask" ref="taskEdit"></task-edit>
-      <el-button type="danger" @click="mutiDel">批量删除</el-button>
+      <task-edit ref="taskEdit"></task-edit>
+      <el-button type="danger" @click="delTask">批量删除</el-button>
     </div>
     <div class="task-list"><!-- 带分页表格 -->
         <pager-table
@@ -135,67 +135,23 @@ export default {
       }
       return type
     },
-    addTask: function (taskInfo = {}) {
-      JSON.stringify(taskInfo) !== '{}' && this.taskList.push(taskInfo)
-    },
     delTask: function (taskInfo) {
-      var INDEX = this.taskList.findIndex(function (value, index, arr) {
-        return value.id === taskInfo.id
-      })
-      if (INDEX >= 0) {
-        this.$confirm('确定要刪除<span style="color:#f00">' + taskInfo.name + '</span>吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          dangerouslyUseHTMLString: true
-        }).then(() => {
-          this.taskList.splice(INDEX, 1)
-          this.$message({
-            message: '刪除成功',
-            type: 'warning'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      }
-    },
-    mutiDel: function () {
-      var selections = this.$refs.pagerTable.getSelectData()
-      if (selections.length) {
-        let str = ''
-        let ids = []
-        for (let [index, elem] of selections.entries()) {
-          str += elem.name
-          ids.push(elem.id)
-          if (index !== selections.length - 1) {
-            str += ','
-          }
-        }
-        this.$confirm('确定要刪除<span style="color:#f00">' + str + '</span>吗?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-          dangerouslyUseHTMLString: true
-        }).then(() => {
-          this.$message({
-            message: '刪除成功',
-            type: 'warning'
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      } else {
+      this.$confirm('确定要刪除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
         this.$message({
-          message: '请至少选择一项！',
+          message: '刪除成功',
           type: 'warning'
         })
-      }
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
   }
 }
