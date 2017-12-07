@@ -5,7 +5,8 @@
       <div class="operation pb10 clearfix"><!-- 操作栏 -->
         <el-button type="primary" @click="orgEdit">添加</el-button>
         <org-edit ref="orgEdit"></org-edit>
-        <el-button>导入</el-button>
+        <el-button @click="orgUpload">导入</el-button>
+        <upload title="组织导入" action="https://jsonplaceholder.typicode.com/posts/" downloadUrl="https://www.baidu.com" tips="请选择EXCEL文件！" ref='orgUpload'></upload>
         <el-button>导出</el-button>
         <el-button type="danger" @click="orgDel({})">批量删除</el-button>
       </div>
@@ -64,6 +65,7 @@
 import OrgTreeView from './OrgTreeView'
 import PagerTable from '../../components/PagerTable'
 import OrgEdit from './OrgEdit'
+import Upload from '../../components/Upload'
 export default {
   data () {
     return {
@@ -87,7 +89,8 @@ export default {
   components: {
     OrgTreeView,
     PagerTable,
-    OrgEdit
+    OrgEdit,
+    Upload
   },
   methods: {
     /**
@@ -123,6 +126,9 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    orgUpload: function () {
+      this.$refs['orgUpload'].openDialog()
     }
   }
 }
