@@ -12,12 +12,8 @@
       </div>
       <div class="org-list"><!-- 带分页表格 -->
         <pager-table
-        :pageSize="searchCondition.pageSize"
-        :currentPage="searchCondition.currentPage"
-        :total="searchCondition.total"
-        @search="search"
-        hasSelect
-        :tableData="orgList">
+        :fetch="search"
+        hasSelect>
           <template slot="table-column">
             <el-table-column
               label="组织名称"
@@ -59,21 +55,7 @@ import {getOrgList} from '@/api/orgManager'
 export default {
   data () {
     return {
-      searchCondition: {
-        pageSize: 10,
-        currentPage: 1,
-        total: 11,
-        orgUuid: null
-      },
-      orgList: [
-        {
-          uuid: '321321321',
-          name: '1单元',
-          orgParentUuid: '24432423423',
-          orgParentName: '1幢',
-          memo: '1幢1单元'
-        }
-      ]
+      orgUuid: null
     }
   },
   components: {
@@ -120,25 +102,9 @@ export default {
       this.$refs['orgUpload'].openDialog()
     },
     search: function (options) {
-      let condition = {}
-      if (!options) options = {}
-      condition.currentPage = options.currentPage || 1
-      condition.pageSize = options.pageSize || this.searchCondition.pageSize
-      condition.orgUuid = options.orgUuid || this.searchCondition.orgUuid
-      getOrgList(condition)
-      .then(res => {
-        var data = res.data
-        if (data.success === true) {
-          this.searchCondition.pageSize = condition.pageSize
-          this.searchCondition.currentPage = condition.currentPage
-          this.searchCondition.orgUuid = condition.orgUuid
-          this.searchCondition.total = data.data.total
-          this.orgList = data.data.tableData
-        }
-      })
-      .catch(function () {
-        debugger
-      })
+      let condition = options || {}
+      condition.orgUuid = this.orgUuid
+      return getOrgList(condition)
     }
   }
 }

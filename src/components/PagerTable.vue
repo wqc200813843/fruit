@@ -2,6 +2,7 @@
   <div class="pager-table">
     <el-table
     ref="table"
+    v-loading="loading"
     :data="tableData"
     stripe
     border
@@ -28,32 +29,31 @@
 </template>
 <script>
 export default {
-  data () {
-    return {
-      selections: []
-    }
-  },
   props: {
-    tableData: {
-      default: [],
-      type: Array
-    },
-    total: {
-      default: 0,
-      type: Number
-    },
-    currentPage: {
-      default: 1,
-      type: Number
-    },
     hasSelect: {
       default: false,
       type: Boolean
     },
-    pageSize: {
-      default: 10,
-      type: Number
+    fetch: {
+      default: function () {},
+      type: Function
     }
+  },
+  data () {
+    return {
+      selections: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 10,
+      tableData: [],
+      loading: false
+    }
+  },
+  mounted: function () {
+    this.getData({
+      currentPage: this.currentPage,
+      pageSize: this.pageSize
+    })
   },
   methods: {
     /**
@@ -75,17 +75,39 @@ export default {
      * @param Number val 选择的单页总数得值
      */
     sizeChange: function (val) {
-      this.$emit('search', {pageSize: val})
+      let condition = {}
+      this.pageSize = val
+      condition.currentPage = 1
+      condition.pageSize = val
+      this.getData(condition)
     },
     /**
      * @description 分页组件当前页变化
      * @param Number val 选择当前页的值
      */
     currentChange: function (val) {
-      this.$emit('search', {currentPage: val})
+      let condition = {}
+      this.currentPage = val
+      condition.currentPage = val
+      condition.pageSize = this.pageSize
+      this.getData(condition)
     },
-    doLayOut: function () {
-      this.$refs['table'].doLayout()
+    getData: function (options) {
+      this.loading = true
+      this.fetch(options)
+      .then(res => {
+        var self = this
+        this.total = res.data.data.total
+        const timeOut = setTimeout(function () {
+          self.tableData = res.data.data.tableData
+          self.loading = false
+          clearTimeout(timeOut)
+        }, 2000)
+      })
+      .catch(err => {
+        console.log(err)
+        this.loading = false
+      })
     }
   }
 }

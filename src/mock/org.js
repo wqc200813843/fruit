@@ -1,6 +1,5 @@
 export default {
   getOrgList: config => {
-    debugger
     var condition = JSON.parse(config.body)
     var data = []
     for (let i = 0, length = condition.pageSize; i < length; i++) {
@@ -16,7 +15,7 @@ export default {
       data: {
         pageSize: condition.pageSize,
         currentPage: 1,
-        total: 51,
+        total: condition.currentPage === 2 ? 51 : 41,
         tableData: data
       },
       success: true,
