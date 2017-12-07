@@ -112,7 +112,14 @@ export default {
 </script>
 <style scoped>
 .tree-container {
+  display: flex;
+  flex-flow: column;
 }
+
+.el-tree {
+  flex: 1;
+}
+
 .fuzzy-search {
   margin: 10px;
   width: 178px;

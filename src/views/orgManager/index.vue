@@ -8,35 +8,24 @@
         <el-button @click="orgUpload">导入</el-button>
         <upload title="组织导入" action="https://jsonplaceholder.typicode.com/posts/" downloadUrl="https://www.baidu.com" tips="请选择EXCEL文件！" ref='orgUpload'></upload>
         <el-button>导出</el-button>
-        <el-button type="danger" @click="orgDel({})">批量删除</el-button>
+        <el-button type="danger" @click="orgDel()">批量删除</el-button>
       </div>
       <div class="org-list"><!-- 带分页表格 -->
         <pager-table
-        ref='pagerTable'
         :pageSize="searchCondition.pageSize"
         :currentPage="searchCondition.currentPage"
         :total="searchCondition.total"
+        @search="search"
         hasSelect
         :tableData="orgList">
           <template slot="table-column">
             <el-table-column
               label="组织名称"
-              prop="name"
-              width="80">
+              prop="name">
             </el-table-column>
             <el-table-column
               label="上级组织名称"
-              prop="parentName">
-            </el-table-column>
-            <el-table-column
-              label="创建时间"
-              prop="createTime"
-              width="160">
-            </el-table-column>
-            <el-table-column
-              label="创建人"
-              prop="creater"
-              width="100">
+              prop="orgParentName">
             </el-table-column>
             <el-table-column
               label="描述"
@@ -66,21 +55,22 @@ import OrgTreeView from './OrgTreeView'
 import PagerTable from '../../components/PagerTable'
 import OrgEdit from './OrgEdit'
 import Upload from '../../components/Upload'
+import {getOrgList} from '@/api/orgManager'
 export default {
   data () {
     return {
       searchCondition: {
         pageSize: 10,
         currentPage: 1,
-        total: 0
+        total: 11,
+        orgUuid: null
       },
       orgList: [
         {
-          id: '321321321',
+          uuid: '321321321',
           name: '1单元',
-          parentName: '1幢',
-          createTime: '2017-12-06 20:02:20',
-          creater: 'wangqichao',
+          orgParentUuid: '24432423423',
+          orgParentName: '1幢',
           memo: '1幢1单元'
         }
       ]
@@ -100,7 +90,6 @@ export default {
      */
     orgEdit: function (orgInfo = {}) {
       const orgInfoTmp = Object.assign({}, orgInfo)
-      orgInfoTmp.createTime && (orgInfoTmp.time = new Date(orgInfoTmp.time))
       this.$refs['orgEdit'].orgEdit(orgInfoTmp)
     },
     /**
@@ -108,7 +97,7 @@ export default {
      *
      * @param {Object} orgInfo @default {} 组织信息
      */
-    orgDel: function (orgInfo = '') {
+    orgDel: function (orgInfo = {}) {
       if (!orgInfo) return
       this.$confirm('确定要刪除吗?', '提示', {
         confirmButtonText: '确定',
@@ -129,6 +118,27 @@ export default {
     },
     orgUpload: function () {
       this.$refs['orgUpload'].openDialog()
+    },
+    search: function (options) {
+      let condition = {}
+      if (!options) options = {}
+      condition.currentPage = options.currentPage || 1
+      condition.pageSize = options.pageSize || this.searchCondition.pageSize
+      condition.orgUuid = options.orgUuid || this.searchCondition.orgUuid
+      getOrgList(condition)
+      .then(res => {
+        var data = res.data
+        if (data.success === true) {
+          this.searchCondition.pageSize = condition.pageSize
+          this.searchCondition.currentPage = condition.currentPage
+          this.searchCondition.orgUuid = condition.orgUuid
+          this.searchCondition.total = data.data.total
+          this.orgList = data.data.tableData
+        }
+      })
+      .catch(function () {
+        debugger
+      })
     }
   }
 }

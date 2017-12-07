@@ -6,18 +6,18 @@
     <el-form ref='form' :model="form" label-width="100px" :rules="rules">
       <el-row>
         <el-col :span="20">
-          <el-form-item label="上级组织" prop="parentName">
-            <el-input v-model="form.parentName" auto-complete="off"></el-input>
+          <el-form-item label="上级组织" prop="orgParentName">
+            <el-input v-model="form.orgParentName" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="组织名称" prop="name">
             <el-input v-model="form.name" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="任务内容" prop="memo">
+          <el-form-item label="内容" prop="memo">
             <el-input
               resize="none"
               type="textarea"
               :rows="4"
-              placeholder="请输入任务内容"
+              placeholder="请输入内容"
               v-model="form.memo">
             </el-input>
           </el-form-item>
@@ -36,9 +36,10 @@ export default {
     return {
       dialogFormVisible: false, // 显隐dialog
       form: { // 表单信息
-        id: null,
+        uuid: null,
         name: '', // 名称
-        parentName: '',
+        orgParentUuid: null,
+        orgParentName: '',
         memo: ''
       },
       rules: { // Form表单字段验证规则
@@ -59,9 +60,10 @@ export default {
      * @param {Object} taskInfo @default {} 任务信息
      */
     orgEdit: function (taskInfo = {}) {
-      this.form.id = taskInfo.id || null
+      this.form.uuid = taskInfo.uuid || null
       this.form.name = taskInfo.name || ''
-      this.form.parentName = taskInfo.parentName || ''
+      this.form.orgParentUuid = taskInfo.orgParentUuid || null
+      this.form.orgParentName = taskInfo.orgParentName || ''
       this.form.memo = taskInfo.memo || ''
       this.dialogFormVisible = true
     },

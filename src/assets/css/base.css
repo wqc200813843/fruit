@@ -97,3 +97,14 @@ html,body {
 .el-table .el-table__body-wrapper {
   overflow-x: hidden;
 }
+
+/* 树组件滚动条问题 */
+.el-tree {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.el-tree> .el-tree-node {
+  display: inline-block!important;
+  float: left;
+}
