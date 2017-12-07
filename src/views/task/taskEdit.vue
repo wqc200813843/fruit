@@ -56,7 +56,6 @@
   </el-dialog>
 </template>
 <script>
-import {parseTime} from '../../utils'
 export default {
   data () {
     return {
