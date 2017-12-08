@@ -8,11 +8,8 @@
     <div class="task-list"><!-- 带分页表格 -->
         <pager-table
         ref="pagerTable"
-        :pageSize="searchCondition.pageSize"
-        :currentPage="searchCondition.currentPage"
-        :total="searchCondition.total"
-        hasSelect
-        :tableData="taskList">
+        :fetch="search"
+        hasSelect>
           <template slot="table-column">
             <el-table-column
               label="名称"
@@ -74,28 +71,15 @@
 <script>
 import PagerTable from '../../components/PagerTable'
 import taskEdit from './taskEdit'
+import {getTaskList} from '../../api/taskManager'
 export default {
   data () {
     return {
       searchCondition: {
         name: '3232',
         personType: '',
-        sex: '',
-        pageSize: 10,
-        currentPage: 1,
-        total: 1
+        sex: ''
       },
-      taskList: [
-        {
-          id: '432423423423',
-          name: 'fruit manager v1.0',
-          type: '1',
-          needTime: 20,
-          time: '2017-12-30',
-          complete: false,
-          content: '1. fruit manager\n2.buyer manager'
-        }
-      ],
       selections: []
     }
   },
@@ -152,6 +136,13 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    search: function (options) {
+      let condition = options || {}
+      condition.name = this.searchCondition.name
+      condition.personType = this.searchCondition.personType
+      condition.sex = this.searchCondition.sex
+      return getTaskList(condition)
     }
   }
 }

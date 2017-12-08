@@ -1,8 +1,7 @@
 <template>
-  <div class="pager-table">
+  <div class="pager-table" v-loading="loading">
     <el-table
     ref="table"
-    v-loading="loading"
     :data="tableData"
     stripe
     border

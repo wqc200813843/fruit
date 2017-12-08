@@ -1,14 +1,16 @@
 export default {
-  getOrgList: config => {
+  getTaskList: config => {
     var condition = JSON.parse(config.body)
     var data = []
     for (let i = 0, length = condition.pageSize; i < length; i++) {
       data.push({
-        uuid: '321321321',
-        name: '1单元',
-        orgParentUuid: '24432423423',
-        orgParentName: '1幢',
-        memo: '1幢1单元'
+        id: '432423423423',
+        name: 'fruit manager v1.0',
+        type: '1',
+        needTime: 20,
+        time: '2017-12-30',
+        complete: false,
+        content: '1. fruit manager\n2.buyer manager'
       })
     }
     return {
