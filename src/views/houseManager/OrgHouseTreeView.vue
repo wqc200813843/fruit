@@ -86,10 +86,16 @@ export default {
     }
   },
   methods: {
-    addOrg: function () {
+    addHouse: function () {
       this.$message({
-        message: '添加组织',
+        message: '添加房屋',
         type: 'success'
+      })
+    },
+    delOrg: function () {
+      this.$message({
+        message: '删除组织',
+        type: 'warning'
       })
     },
     renderContent: function (h, { node, data, store }) {
@@ -98,12 +104,16 @@ export default {
           <span style="margin-right:8px">{node.label}</span>
           <i
             class="el-icon-plus"
+            title="添加"
             on-click={() => {
-              this.addOrg()
+              this.addHouse()
             }}
           />
-          <i class="el-icon-edit-outline" />
-          <i class="el-icon-close" />
+          <i class="el-icon-close"
+            on-click={() => {
+              this.delOrg()
+            }}
+          />
         </span>
       )
     }
