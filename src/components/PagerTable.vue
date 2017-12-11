@@ -1,6 +1,6 @@
 <template>
     <div class="pager-table" v-loading="loading">
-        <el-table ref="table" :data="tableData" stripe border header-cell-class-name="text-align-center" @selection-change="handleSelectionChange" style="width: 100%;">
+        <el-table height="100%" ref="table" :data="tableData" stripe border header-cell-class-name="text-align-center" @selection-change="handleSelectionChange" style="width: 100%;">
             <el-table-column v-if="hasSelect" type="selection" width="55">
             </el-table-column>
             <slot name="table-column"></slot>
