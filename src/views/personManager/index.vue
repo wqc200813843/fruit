@@ -1,5 +1,5 @@
 <template>
-  <div>personmanager</div>
+    <div>personmanager</div>
 </template>
 <script>
 export default {

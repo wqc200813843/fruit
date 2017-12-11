@@ -3,7 +3,7 @@ import orgAPI from './org'
 import taskAPI from './task'
 import houseAPI from './house'
 Mock.setup({
-  timeout: '350-600'
+    timeout: '350-600'
 })
 
 Mock.mock(/\/org\/list/, 'get', orgAPI.getOrgList)
