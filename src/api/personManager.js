@@ -1,8 +1,8 @@
 import fetch from '@/utils/fetch'
 
-export function getHouseList (data) {
+export function getPersonList (data) {
     return fetch({
-        url: '/house/list',
+        url: '/person/list',
         method: 'get',
         data
     })
