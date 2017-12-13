@@ -64,7 +64,7 @@ export default {
                     { min: 1, max: 37, message: '长度在 1 到 30 个字符', trigger: 'blur' }
                 ],
                 memo: [
-                    { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
+                    { min: 1, max: 102, message: '长度在 1 到 100 个字符', trigger: 'blur' }
                 ]
             },
             list: {
