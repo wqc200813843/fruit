@@ -61,7 +61,7 @@ export default {
             rules: { // Form表单字段验证规则
                 name: [
                     { required: true, message: '请输入组织名称', trigger: 'blur' },
-                    { min: 1, max: 35, message: '长度在 1 到 30 个字符', trigger: 'blur' }
+                    { min: 1, max: 37, message: '长度在 1 到 30 个字符', trigger: 'blur' }
                 ],
                 memo: [
                     { min: 1, max: 100, message: '长度在 1 到 100 个字符', trigger: 'blur' }
