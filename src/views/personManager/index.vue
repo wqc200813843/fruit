@@ -60,11 +60,11 @@ export default {
         PersonEdit
     },
     methods: {
-/**
-         * @description 开始人员添加/编辑
-         *
-         * @param {Object} personInfo @default {} 人员信息
-         */
+        /**
+                 * @description 开始人员添加/编辑
+                 *
+                 * @param {Object} personInfo @default {} 人员信息
+                 */
         personEdit: function (personInfo = {}) {
             const personInfoTmp = Object.assign({}, personInfo)
             this.$refs['personEdit'].personEdit(personInfoTmp)
@@ -146,7 +146,7 @@ export default {
 </script>
 <style scoped>
 .person-list {
-    flex: 1;
-    position: relative;
+  flex: 1;
+  position: relative;
 }
 </style>
